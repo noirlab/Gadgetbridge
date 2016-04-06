@@ -81,6 +81,9 @@ public class AppBlacklistActivity extends Activity {
 
                 checkbox.setChecked(GBApplication.blacklist.contains(appInfo.packageName));
 
+                //sort by application display name first
+                Collections.sort(packageList, new ApplicationInfo.DisplayNameComparator(pm));
+                //move all blacklisted apps to the top
                 Collections.sort(packageList, new Comparator<ApplicationInfo>() {
                     @Override
                     public int compare(ApplicationInfo ai1, ApplicationInfo ai2) {
@@ -88,8 +91,8 @@ public class AppBlacklistActivity extends Activity {
                         boolean blacklisted2 = GBApplication.blacklist.contains(ai2.packageName);
 
                         if ((blacklisted1 && blacklisted2) || (!blacklisted1 && !blacklisted2)) {
-                            // both blacklisted or both not blacklisted = sort by alphabet
-                            return ai1.packageName.compareTo(ai2.packageName);
+                            // both blacklisted or both not blacklisted = keep display name alphabet sorting
+                            return 0;
                         } else if (blacklisted1) {
                             return -1;
                         } else {
